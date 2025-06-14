@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="sr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodaj Vest</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <main class="container">
+        <h2>Dodaj Novu Vest</h2>
+        <form id="vest-form">
+            <label for="naslov">Naslov:</label>
+            <input type="text" id="naslov" required>
+
+            <label for="tekst">Tekst vesti:</label>
+            <textarea id="tekst" rows="6" required></textarea>
+
+            <label for="kategorija">Kategorija:</label>
+            <input type="text" id="kategorija" required>
+
+            <label for="slika">URL slike:</label>
+            <input type="text" id="slika" required>
+
+            <label for="datum">Datum:</label>
+            <input type="date" id="datum" required>
+
+            <button type="submit">Sačuvaj vest</button>
+            <p id="poruka" style="color: green;"></p>
+        </form>
+    </main>
+
+    <script>
+        if (sessionStorage.getItem('admin') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        document.getElementById('vest-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const novaVest = {
+                naslov: document.getElementById('naslov').value,
+                tekst: document.getElementById('tekst').value,
+                kategorija: document.getElementById('kategorija').value,
+                slika: document.getElementById('slika').value,
+                datum: document.getElementById('datum').value
+            };
+
+            fetch('../php/save_news.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(novaVest)
+            })
+                .then(res => res.text())
+                .then(msg => {
+                    document.getElementById('poruka').innerText = msg;
+                    document.getElementById('vest-form').reset();
+                });
+        });
+    </script>
+</body>
+
+</html>

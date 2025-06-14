@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="sr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Obriši Vest</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <main class="container">
+        <h2>Obriši Vesti</h2>
+        <div id="lista-brisanje"></div>
+        <p id="poruka" style="color: green;"></p>
+    </main>
+
+    <script>
+        if (sessionStorage.getItem('admin') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        function ucitajVesti() {
+            fetch('../json/vesti.json')
+                .then(res => res.json())
+                .then(data => {
+                    const lista = document.getElementById('lista-brisanje');
+                    lista.innerHTML = '';
+                    data.forEach(vest => {
+                        const div = document.createElement('div');
+                        div.innerHTML = `
+              <strong>${vest.naslov}</strong>
+              <button onclick="obrisi(${vest.id})">Obriši</button>
+            `;
+                        lista.appendChild(div);
+                    });
+                });
+        }
+
+        function obrisi(id) {
+            if (confirm('Da li ste sigurni da želite da obrišete ovu vest?')) {
+                fetch('../php/delete_news.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
+                })
+                    .then(res => res.text())
+                    .then(msg => {
+                        document.getElementById('poruka').innerText = msg;
+                        ucitajVesti();
+                    });
+            }
+        }
+
+        ucitajVesti();
+    </script>
+</body>
+
+</html>

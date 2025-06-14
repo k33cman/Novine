@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="sr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Izmeni Vest</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <main class="container">
+        <h2>Izmena Vesti</h2>
+        <div id="lista-izmena"></div>
+
+        <div id="forma-izmena" style="display: none;">
+            <h3>Izmeni vest</h3>
+            <form id="izmena-forma">
+                <input type="hidden" id="id">
+                <label for="naslov">Naslov:</label>
+                <input type="text" id="naslov">
+                <label for="tekst">Tekst:</label>
+                <textarea id="tekst" rows="6"></textarea>
+                <label for="kategorija">Kategorija:</label>
+                <input type="text" id="kategorija">
+                <label for="slika">URL slike:</label>
+                <input type="text" id="slika">
+                <label for="datum">Datum:</label>
+                <input type="date" id="datum">
+                <button type="submit">Sačuvaj izmene</button>
+                <p id="poruka" style="color: green;"></p>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        if (sessionStorage.getItem('admin') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        fetch('../json/vesti.json')
+            .then(res => res.json())
+            .then(data => {
+                const div = document.getElementById('lista-izmena');
+                data.forEach(vest => {
+                    const el = document.createElement('div');
+                    el.innerHTML = `<strong>${vest.naslov}</strong> <button onclick='uredi(${JSON.stringify(vest)})'>Izmeni</button>`;
+                    div.appendChild(el);
+                });
+            });
+
+        function uredi(vest) {
+            document.getElementById('forma-izmena').style.display = 'block';
+            document.getElementById('id').value = vest.id;
+            document.getElementById('naslov').value = vest.naslov;
+            document.getElementById('tekst').value = vest.tekst;
+            document.getElementById('kategorija').value = vest.kategorija;
+            document.getElementById('slika').value = vest.slika;
+            document.getElementById('datum').value = vest.datum;
+        }
+
+        document.getElementById('izmena-forma').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const izmenjenaVest = {
+                id: parseInt(document.getElementById('id').value),
+                naslov: document.getElementById('naslov').value,
+                tekst: document.getElementById('tekst').value,
+                kategorija: document.getElementById('kategorija').value,
+                slika: document.getElementById('slika').value,
+                datum: document.getElementById('datum').value
+            };
+
+            fetch('../php/update_news.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(izmenjenaVest)
+            })
+                .then(res => res.text())
+                .then(msg => {
+                    document.getElementById('poruka').innerText = msg;
+                });
+        });
+    </script>
+</body>
+
+</html>

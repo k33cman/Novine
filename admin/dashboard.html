@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="sr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .admin-meni {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .admin-meni a,
+        .admin-meni button {
+            padding: 10px;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        .admin-meni button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Novo Pazovačke Novine</h1>
+        <p>Vaš pouzdan izvor vesti iz Novih Pazove i okoline</p>
+        <nav>
+            <a href="../index.html">Početna</a>
+            <a href="nova-vest.html">Nova Vest</a>
+            <a href="izmeni-vest.html">Izmeni Vest</a>
+            <a href="obrisi-vest.html">Obriši Vest</a>
+            <a href="logout.html" onclick="sessionStorage.clear()">Logout</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h2>Admin Panel</h2>
+        <p>Dobrodošao!</p>
+
+        <div class="admin-meni">
+            <a href="nova-vest.html">➕ Dodaj novu vest</a>
+            <a href="izmeni-vest.html">✏️ Izmeni vest</a>
+            <a href="obrisi-vest.html">🗑️ Obriši vest</a>
+            <button onclick="logout()">🚪 Odjavi se</button>
+        </div>
+    </main>
+
+    <script>
+        if (sessionStorage.getItem('admin') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        function logout() {
+            sessionStorage.removeItem('admin');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+
+</html>
