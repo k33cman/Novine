@@ -27,14 +27,5 @@ Moderan i responzivan sajt za prikaz lokalnih novosti, najava i obaveštenja. Ov
 - **JSON** ili tekstualni fajlovi – Za lokalno čuvanje podataka
 - *Bez frameworka* – čisti frontend
 
----
-
-## 🧰 Instalacija i pokretanje
-
-1. Kloniraj repozitorijum:
-   ```bash
-   git clone https://github.com/korisnicko-ime/naziv-repozitorijuma.git
-
-
 слава Богу!
 >>>>>>> 117bb95 (First upload slava Bogu)
