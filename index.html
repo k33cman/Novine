@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="sr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vesti - Naslovna</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <h1>Online Novine</h1>
+            <nav>
+                <a href="index.html">Početna</a>
+                <a href="#">Kategorije</a>
+                <a href="#">Pretraga</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2>Najnovije vesti</h2>
+
+        <!-- Filter i pretraga -->
+        <div class="filter-container">
+            <select id="filterKategorija">
+                <option value="sve">Sve kategorije</option>
+                <option value="Politika">Politika</option>
+                <option value="Sport">Sport</option>
+                <option value="Kultura">Kultura</option>
+                <option value="Ekonomija">Ekonomija</option>
+                <option value="Obrazovanje">Obrazovanje</option>
+                <option value="Zdravlje">Zdravlje</option>
+            </select>
+
+            <input type="text" id="pretraga" placeholder="Pretraži naslove i tekst..." />
+        </div>
+
+        <div id="vesti-lista" class="vesti-grid"></div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Online Novine</p>
+        </div>
+    </footer>
+
+    <script>
+        const vestiLista = document.getElementById('vesti-lista');
+        const filterKategorija = document.getElementById('filterKategorija');
+        const pretragaInput = document.getElementById('pretraga');
+
+        let vesti = [];
+
+        // Učitaj vesti iz JSON-a
+        fetch('json/vesti.json')
+            .then(response => response.json())
+            .then(data => {
+                vesti = data.reverse(); // Prikaži najnovije prve
+                prikaziVesti(vesti);
+            });
+
+        // Funkcija za prikaz vesti
+        function prikaziVesti(lista) {
+            vestiLista.innerHTML = '';
+
+            if (lista.length === 0) {
+                vestiLista.innerHTML = '<p>Nema vesti koje odgovaraju kriterijumu.</p>';
+                return;
+            }
+
+            lista.forEach(vest => {
+                const div = document.createElement('div');
+                div.classList.add('vest');
+                div.innerHTML = `
+                    <img src="${vest.slika}" alt="${vest.naslov}" />
+                    <h3>${vest.naslov}</h3>
+                    <p>${vest.tekst.substring(0, 100)}...</p>
+                    <a href="vest.html?id=${vest.id}">Pročitaj više</a>
+                `;
+                vestiLista.appendChild(div);
+            });
+        }
+
+        // Funkcija za filtriranje i pretragu
+        function filtrirajIPretrazi() {
+            const kategorija = filterKategorija.value;
+            const pretraga = pretragaInput.value.trim().toLowerCase();
+
+            let filtrirane = vesti;
+
+            if (kategorija !== 'sve') {
+                filtrirane = filtrirane.filter(vest =>
+                    vest.kategorija.toLowerCase() === kategorija.toLowerCase()
+                );
+            }
+
+            if (pretraga !== '') {
+                filtrirane = filtrirane.filter(vest =>
+                    vest.naslov.toLowerCase().includes(pretraga) ||
+                    vest.tekst.toLowerCase().includes(pretraga)
+                );
+            }
+
+            prikaziVesti(filtrirane);
+        }
+
+        // Event listeneri za dropdown i input
+        filterKategorija.addEventListener('change', filtrirajIPretrazi);
+        pretragaInput.addEventListener('input', filtrirajIPretrazi);
+    </script>
+
+</body>
+
+</html>

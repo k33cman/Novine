@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detalji vesti</title>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Online Novine</h1>
+      <nav>
+        <a href="index.html">Naslovna</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="vest-detalji"></div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Online Novine</p>
+    </div>
+  </footer>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = parseInt(urlParams.get('id'));
+
+    fetch('json/vesti.json')
+      .then(response => response.json())
+      .then(data => {
+        const vest = data.find(v => v.id === id);
+        const container = document.getElementById('vest-detalji');
+        if (vest) {
+          container.innerHTML = `
+            <h2>${vest.naslov}</h2>
+            <p><em>${vest.datum} | ${vest.kategorija}</em></p>
+            <img src=\"${vest.slika}\" alt=\"${vest.naslov}\" style=\"max-width:100%; margin:20px 0;\" />
+            <p>${vest.tekst}</p>
+          `;
+        } else {
+          container.innerHTML = '<p>Vest nije pronađena.</p>';
+        }
+      });
+  </script>
+</body>
+</html>

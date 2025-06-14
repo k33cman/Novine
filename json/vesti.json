@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "naslov": "Nova škola u Novoj Pazovi",
+        "tekst": "Otvorena je nova škola u Novoj Pazovi koja je...",
+        "kategorija": "Obrazovanje",
+        "datum": "2025-06-12",
+        "slika": "skola.jpg"
+    },
+    {
+        "id": 2,
+        "naslov": "Fudbalska utakmica završena nerešeno",
+        "tekst": "Današnja utakmica između dva kluba završila je...",
+        "kategorija": "Sport",
+        "datum": "2025-06-13",
+        "slika": "utakmica.jpg"
+    }
+]
